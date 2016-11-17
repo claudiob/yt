@@ -219,7 +219,7 @@ module Yt
     # /search only returns id and partial snippets. for any other part we
     # need a second call to /channels
     def videos_response(options = {})
-      search = videos_search_response(options[:limit], options[:offset])
+      search = videos_search_response(options[:limit], options[:offset], options[:published_before])
 
       if options[:parts] == [:id]
         search.tap do |response|
@@ -232,15 +232,17 @@ module Yt
       end
     end
 
-    def videos_search_response(limit, offset)
+    def videos_search_response(limit, offset, published_before)
       Net::HTTP.start 'www.googleapis.com', 443, use_ssl: true do |http|
-        http.request videos_search_request(limit, offset)
+        http.request videos_search_request(limit, offset, published_before)
       end.tap{|response| response.body = JSON response.body}
     end
 
-    def videos_search_request(limit, offset)
-      query = {key: Yt.configuration.api_key, type: :video, channelId: @id, part: :id, maxResults: [limit, 50].min, pageToken: offset}.to_param
-
+    def videos_search_request(limit, offset, published_before)
+      query = {key: Yt.configuration.api_key, type: :video, channelId: @id, part: :id, maxResults: [limit, 50].min, pageToken: offset, order: :date}
+      query[:publishedBefore] = published_before if published_before
+      query = query.to_param
+      p "QUERY #{query}"
       Net::HTTP::Get.new("/youtube/v3/search?#{query}").tap do |request|
         request.initialize_http_header 'Content-Type' => 'application/json'
       end

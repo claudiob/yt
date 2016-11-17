@@ -33,8 +33,19 @@ module Yt
             block.call video
           end
 
-          break if @response.body['nextPageToken'].nil? || (@items.size < 50 && @options[:limit] == Float::INFINITY)
-          @options[:offset] = @response.body['nextPageToken']
+          p "COUNT #{@count}"
+
+          if @response.body['nextPageToken'].nil? || (@items.size < 50 && @options[:limit] == Float::INFINITY)
+            if @items.empty? || @count < 500
+              break
+            else # ADD: don't do this for account#videos, only channel#videos and ONLY if the order is by date desc
+              time = (@items.last.published_at - 1.second).strftime '%FT%T.999Z'
+              @options[:offset] = nil
+              @options[:published_before] = time
+            end
+          else
+            @options[:offset] = @response.body['nextPageToken']
+          end
         end
         @last_options = @options.dup
       end
