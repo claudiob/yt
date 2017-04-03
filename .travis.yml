@@ -1,8 +1,0 @@
-language: ruby
-notifications:
-  email: false
-rvm:
-  - 2.2.2
-script:
-  - bundle exec rspec
-  - bundle exec yard stats | grep "100.00% documented"
