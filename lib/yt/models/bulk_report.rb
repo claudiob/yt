@@ -13,6 +13,8 @@ module Yt
       has_attribute :end_time, type: Time
       has_attribute :download_url
 
+      has_attribute :create_time, type: Time
+
       # @private
       def initialize(options = {})
         @data = options.fetch(:data, {})
