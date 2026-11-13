@@ -124,7 +124,7 @@ module Yt
         kaios: 'KAIOS'
       }
 
-      attr_writer :metrics
+      attr_writer :metrics, :sort
 
       def within(days_range, country, state, dimension, videos, historical, max_retries = 3)
         @days_range = days_range
@@ -201,13 +201,19 @@ module Yt
           params['includeHistoricalChannelData'] = @historical if @historical
           params['maxResults'] = 50 if @dimension.in? [:playlist, :video]
           params['maxResults'] = 25 if @dimension.in? [:embedded_player_location, :related_video, :search_term, :referrer]
-          if @dimension.in? [:video, :playlist, :embedded_player_location, :related_video, :search_term, :referrer]
+          if @dimension.in? [:video, :playlist]
             if @metrics.keys == [:estimated_revenue, :estimated_minutes_watched]
               params['sort'] = '-estimatedRevenue'
             else
               params['sort'] = "-#{@metrics.keys.join(',').to_s.camelize(:lower)}"
             end
           end
+          # YouTube returns error when sort metrics are multiple. Use only the first one.
+          if @dimension.in? [:embedded_player_location, :related_video, :search_term, :referrer]
+            params['sort'] = "-#{@metrics.keys.first.to_s.camelize(:lower)}"
+          end
+          # reports(sort:) wins over the default sort above.
+          params['sort'] = "-#{@sort.to_s.camelize(:lower)}" if @sort
           params[:filters] = "video==#{@videos.join ','}" if @videos
           params[:filters] = ((params[:filters] || '').split(';') + ["country==US"]).compact.uniq.join(';') if @dimension == :state && !@state
           params[:filters] = ((params[:filters] || '').split(';') + ["country==#{@country}"]).compact.uniq.join(';') if @country && !@state
