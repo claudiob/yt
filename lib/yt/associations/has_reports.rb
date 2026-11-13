@@ -18,9 +18,6 @@ module Yt
       #   @option options [Symbol] :sort The metric to sort by, descending.
       #     Must be one of +:only+. By default, the order YouTube returns
       #     (for top-N dimensions such as +:video+, by the first metric).
-      #   @option options [Integer] :limit The maximum number of rows
-      #     (+maxResults+). By default, 50 by video or playlist, 25 by
-      #     search term, related video, referrer or embedded player location.
       #   @return [Hash<Symbol, Hash>] the reports for each metric specified.
       #   @example Get the views and estimated minutes watched by day for last week:
       #     resource.reports only: [:views, :estimated_minutes_watched] since: 1.week.ago, by: :day
@@ -251,7 +248,6 @@ module Yt
           reports = Collections::Reports.of(self).tap do |reports|
             reports.metrics = self.class.instance_variable_get(:@metrics).select{|k, v| k.in? only}
             reports.sort = sort
-            reports.limit = options[:limit]
           end
           reports.within date_range, country, state, dimension, videos, historical
         end unless defined?(reports)

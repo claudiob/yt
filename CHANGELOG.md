@@ -8,9 +8,9 @@ For more information about changelogs, check
 
 ## Unreleased
 
-* [FEATURE] `reports(sort:, limit:)`: sort by one of the `:only` metrics
-  (descending) and set `maxResults`, e.g. the top 5 videos by revenue:
-  `channel.reports only: [:estimated_revenue, :views], by: :video, sort: :estimated_revenue, limit: 5`
+* [FEATURE] `reports(sort:)`: sort by one of the `:only` metrics (descending),
+  e.g. the top videos by revenue:
+  `channel.reports only: [:estimated_revenue, :views], by: :video, sort: :estimated_revenue`
 * [BUGFIX] Reports by search term, related video, referrer or embedded player
   location sort by the first metric only (YouTube rejects several)
 

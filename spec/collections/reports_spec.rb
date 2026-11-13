@@ -56,21 +56,11 @@ describe Yt::Collections::Reports do
       it { expect(params['sort']).to eq '-views,engagedViews,estimatedMinutesWatched' }
     end
 
-    context 'given the reports by video sorted by one metric and limited' do
+    context 'given the reports by video sorted by one metric' do
       let(:dimension) { :video }
-      before do
-        reports.sort = :estimated_minutes_watched
-        reports.limit = 5
-      end
+      before { reports.sort = :estimated_minutes_watched }
       it { expect(params['sort']).to eq '-estimatedMinutesWatched' }
-      it { expect(params['maxResults']).to eq 5 }
-    end
-
-    context 'given a limit by search term' do
-      let(:dimension) { :search_term }
-      before { reports.limit = 8 }
-      it { expect(params['maxResults']).to eq 8 }
-      it { expect(params['sort']).to eq '-views' }
+      it { expect(params['maxResults']).to eq 50 }
     end
   end
 
