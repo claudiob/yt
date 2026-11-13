@@ -224,7 +224,7 @@ module Yt
       end
 
       def rescue?(error)
-        'badRequest'.in?(error.reasons) && error.to_s =~ /did not conform/
+        'badRequest'.in?(error.reasons) && error.response_body.to_s =~ /did not conform/
       end
     end
   end

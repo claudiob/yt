@@ -5,7 +5,7 @@ module Yt
     class RequestError < StandardError
       def initialize(msg = {})
         @msg = msg
-        super msg
+        super explanation
       end
 
       def message
