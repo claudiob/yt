@@ -6,6 +6,12 @@ For more information about changelogs, check
 [Keep a Changelog](http://keepachangelog.com) and
 [Vandamme](http://tech-angels.github.io/vandamme).
 
+## Unreleased
+
+* [SECURITY] `to_s` and `inspect` of a request error (and so `"#{error}"`) no
+  longer include the failed request as cURL, which holds the Authorization
+  header. `message` is unchanged: the details only with a log level of :debug or :devel.
+
 ## 0.34.1 - 2026-01-08
 
 * [FEATURE] Add channel.channel_sections

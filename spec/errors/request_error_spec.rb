@@ -26,6 +26,22 @@ describe Yt::Errors::RequestError do
         end
       end
 
+      %i(debug devel info).each do |log_level|
+        describe "given a log level of :#{log_level}" do
+          before do
+            config = Yt.configuration
+            allow(config).to receive(:log_level).and_return(log_level)
+          end
+          specify 'keeps sensitive data out of to_s, inspect and interpolation' do
+            expect{error}.to raise_error do |error|
+              expect(error.to_s).to eq 'A request to YouTube API failed'
+              expect(error.inspect).not_to include 'secret'
+              expect("failed: #{error}").not_to include 'secret'
+            end
+          end
+        end
+      end
+
       describe 'given a different log level' do
         before do
           config = Yt.configuration
