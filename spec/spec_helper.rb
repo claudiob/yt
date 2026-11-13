@@ -9,8 +9,8 @@ end
 
 SimpleCov.start do
   enable_coverage :branch
-  skip '/spec/'
-  skip '/vendor/'
+  add_filter '/spec/'
+  add_filter '/vendor/'
 end
 
 ENV['YT_TEST_CLIENT_ID'] ||= 'XXX'
