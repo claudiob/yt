@@ -9,7 +9,7 @@ not_jruby = %i[ruby mingw x64_mingw].freeze
 # here. This also allows us to use conditional dependencies that depend on the
 # platform
 gem 'pry', platforms: not_jruby
-gem 'simplecov'
+gem 'simplecov', '>= 1.3' # SimpleCov.skip
 gem 'simplecov-cobertura'
 gem 'yard'
 gem 'irb'
