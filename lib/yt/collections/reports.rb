@@ -124,7 +124,7 @@ module Yt
         kaios: 'KAIOS'
       }
 
-      attr_writer :metrics
+      attr_writer :metrics, :sort, :limit
 
       def within(days_range, country, state, dimension, videos, historical, max_retries = 3)
         @days_range = days_range
@@ -212,6 +212,9 @@ module Yt
           if @dimension.in? [:embedded_player_location, :related_video, :search_term, :referrer]
             params['sort'] = "-#{@metrics.keys.first.to_s.camelize(:lower)}"
           end
+          # reports(sort:, limit:) win over the defaults above.
+          params['sort'] = "-#{@sort.to_s.camelize(:lower)}" if @sort
+          params['maxResults'] = @limit if @limit
           params[:filters] = "video==#{@videos.join ','}" if @videos
           params[:filters] = ((params[:filters] || '').split(';') + ["country==US"]).compact.uniq.join(';') if @dimension == :state && !@state
           params[:filters] = ((params[:filters] || '').split(';') + ["country==#{@country}"]).compact.uniq.join(';') if @country && !@state

@@ -2,6 +2,7 @@ require 'spec_helper'
 require 'yt/collections/reports'
 require 'yt/models/content_owner'
 require 'yt/models/video'
+require 'yt/models/channel'
 
 describe Yt::Collections::Reports do
   subject(:reports) { Yt::Collections::Reports.new(parent: content_owner).tap{|reports| reports.metrics = {views: Integer}} }
@@ -53,6 +54,31 @@ describe Yt::Collections::Reports do
     context 'given the reports by video' do
       let(:dimension) { :video }
       it { expect(params['sort']).to eq '-views,engagedViews,estimatedMinutesWatched' }
+    end
+
+    context 'given the reports by video sorted by one metric and limited' do
+      let(:dimension) { :video }
+      before do
+        reports.sort = :estimated_minutes_watched
+        reports.limit = 5
+      end
+      it { expect(params['sort']).to eq '-estimatedMinutesWatched' }
+      it { expect(params['maxResults']).to eq 5 }
+    end
+
+    context 'given a limit by search term' do
+      let(:dimension) { :search_term }
+      before { reports.limit = 8 }
+      it { expect(params['maxResults']).to eq 8 }
+      it { expect(params['sort']).to eq '-views' }
+    end
+  end
+
+  describe 'reports(sort:)' do
+    let(:channel) { Yt::Channel.new id: 'any-id', auth: content_owner }
+
+    it 'must sort by one of the :only metrics' do
+      expect{channel.reports only: [:views], by: :video, sort: :likes}.to raise_error ArgumentError, /sort must be one of the :only metrics/
     end
   end
 end

@@ -6,6 +6,14 @@ For more information about changelogs, check
 [Keep a Changelog](http://keepachangelog.com) and
 [Vandamme](http://tech-angels.github.io/vandamme).
 
+## Unreleased
+
+* [FEATURE] `reports(sort:, limit:)`: sort by one of the `:only` metrics
+  (descending) and set `maxResults`, e.g. the top 5 videos by revenue:
+  `channel.reports only: [:estimated_revenue, :views], by: :video, sort: :estimated_revenue, limit: 5`
+* [BUGFIX] Reports by search term, related video, referrer or embedded player
+  location sort by the first metric only (YouTube rejects several)
+
 ## 0.34.1 - 2026-01-08
 
 * [FEATURE] Add channel.channel_sections
