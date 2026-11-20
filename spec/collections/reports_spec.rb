@@ -62,6 +62,26 @@ describe Yt::Collections::Reports do
       it { expect(params['sort']).to eq '-estimatedMinutesWatched' }
       it { expect(params['maxResults']).to eq 50 }
     end
+
+    context 'given a list of videos' do
+      let(:dimension) { :day }
+      before { reports.instance_variable_set :@videos, %w(video-1 video-2) }
+
+      context 'and the parent already has a filter' do
+        let(:video) { Yt::Channel.new id: 'any-id', auth: content_owner }
+        it { expect(params[:filters]).to eq 'channel==any-id;video==video-1,video-2' }
+      end
+
+      context 'and the parent has no filter' do
+        let(:video) { Yt::Channel.new id: 'any-id', auth: Yt::Account.new }
+        it { expect(params[:filters]).to eq 'video==video-1,video-2' }
+      end
+
+      context 'and the parent has the same video filter' do
+        before { reports.instance_variable_set :@videos, %w(any-id) }
+        it { expect(params[:filters]).to eq 'video==any-id' }
+      end
+    end
   end
 
   describe 'reports(sort:)' do
