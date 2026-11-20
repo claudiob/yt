@@ -16,6 +16,7 @@ For more information about changelogs, check
 * [SECURITY] `to_s` and `inspect` of a request error (and so `"#{error}"`) no
   longer include the failed request as cURL, which holds the Authorization
   header. `message` is unchanged: the details only with a log level of :debug or :devel.
+* [BUGFIX] `reports(videos:)` keeps the parent's `:filters` option instead of replacing it with the `video==` one.
 
 ## 0.34.1 - 2026-01-08
 
@@ -24,7 +25,7 @@ For more information about changelogs, check
 * [FEATURE] Add engaged_views
 * [FEATURE] Add account.sub (thank you @jkowens)
 * [FEATURE] Add content_owner.live_cuepoints
-* [FIX] Fetch channel_id from channel handle url
+* [BUGFIX] Fetch channel_id from channel handle url
 * [BUGFIX] upload_thumbnail and upload_video with path url (thank you @mrj)
 * [IMPROVEMENT] Use `URI.decode_www_form` for Ruby 4.0 (thank you @jules-w2)
 
