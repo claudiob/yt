@@ -214,7 +214,7 @@ module Yt
           end
           # reports(sort:) wins over the default sort above.
           params['sort'] = "-#{@sort.to_s.camelize(:lower)}" if @sort
-          params[:filters] = "video==#{@videos.join ','}" if @videos
+          params[:filters] = ((params[:filters] || '').split(';') + ["video==#{@videos.join ','}"]).compact.uniq.join(';') if @videos
           params[:filters] = ((params[:filters] || '').split(';') + ["country==US"]).compact.uniq.join(';') if @dimension == :state && !@state
           params[:filters] = ((params[:filters] || '').split(';') + ["country==#{@country}"]).compact.uniq.join(';') if @country && !@state
           params[:filters] = ((params[:filters] || '').split(';') + ["province==US-#{@state}"]).compact.uniq.join(';') if @state
