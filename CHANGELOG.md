@@ -13,6 +13,9 @@ For more information about changelogs, check
   `channel.reports only: [:estimated_revenue, :views], by: :video, sort: :estimated_revenue`
 * [BUGFIX] Reports by search term, related video, referrer or embedded player
   location sort by the first metric only (YouTube rejects several)
+* [SECURITY] `to_s` and `inspect` of a request error (and so `"#{error}"`) no
+  longer include the failed request as cURL, which holds the Authorization
+  header. `message` is unchanged: the details only with a log level of :debug or :devel.
 
 ## 0.34.1 - 2026-01-08
 
